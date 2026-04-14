@@ -1,0 +1,76 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  font-family: 'Inter', sans-serif;
+}
+
+.admin-sidebar {
+  width: 250px;
+  background-color: #1a1a1a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.admin-sidebar-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #ff4d4d; /* SprintFit Primary Color */
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  flex-grow: 1;
+}
+
+.admin-nav-link {
+  padding: 15px 20px;
+  color: #ccc;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.admin-nav-link:hover {
+  background-color: #333;
+  color: white;
+}
+
+.admin-sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid #333;
+}
+
+.admin-sidebar-footer p {
+  margin: 0 0 10px 0;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.admin-logout-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid #555;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.admin-logout-btn:hover {
+  background-color: #333;
+}
+
+.admin-main {
+  flex-grow: 1;
+  padding: 30px;
+  overflow-y: auto;
+}

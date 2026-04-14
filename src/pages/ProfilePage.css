@@ -1,0 +1,168 @@
+.profile-page {
+  min-height: calc(100vh - 60px);
+  background: #fdfdfd;
+  padding: 40px 24px;
+}
+
+.profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.profile-container h1 {
+  font-size: 2rem;
+  color: #222;
+  margin-bottom: 30px;
+}
+
+.profile-tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 30px;
+}
+
+.profile-tabs .tab {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #777;
+  padding: 10px 0;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-tabs .tab.active {
+  color: #F5A623;
+}
+
+.profile-tabs .tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #F5A623;
+}
+
+.profile-section {
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+}
+
+.profile-section h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.profile-section p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.orders-list, .addresses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.order-card, .address-card {
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 20px;
+  background: #fafafa;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.order-header .status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status.pending_payment { background: #ffeaa7; color: #d63031; }
+.status.paid { background: #55efc4; color: #00b894; }
+.status.shipped { background: #74b9ff; color: #0984e3; }
+.status.delivered { background: #81ecec; color: #00cec9; }
+
+hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 30px 0;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+}
+
+.profile-form input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.profile-form button {
+  background: #222;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.profile-form button[type="button"] {
+  background: #eee;
+  color: #333;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.add-btn, .edit-btn {
+  background: #F5A623;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.address-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-btn {
+  background: #ff7675;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.mt-4 { margin-top: 20px; }
