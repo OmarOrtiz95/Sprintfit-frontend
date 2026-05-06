@@ -106,16 +106,18 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
         return;
       }
       
+      const { tallas, colores, genero, ...productDataToSend } = formData;
+      
       await onSave(
         {
-          ...formData,
-          price: Number(formData.price),
-          stockQuantity: Number(formData.stockQuantity),
-          categoryId: Number(formData.categoryId),
+          ...productDataToSend,
+          price: Number(productDataToSend.price),
+          stockQuantity: Number(productDataToSend.stockQuantity),
+          categoryId: Number(productDataToSend.categoryId),
           attributes: {
-            ...(formData.tallas ? { talla: formData.tallas.split(',').map(s => s.trim()).filter(s => s !== '') } : {}),
-            ...(formData.colores ? { color: formData.colores.split(',').map(s => s.trim()).filter(s => s !== '') } : {}),
-            ...(formData.genero ? { genero: formData.genero } : {})
+            ...(tallas ? { talla: tallas.split(',').map(s => s.trim()).filter(s => s !== '') } : {}),
+            ...(colores ? { color: colores.split(',').map(s => s.trim()).filter(s => s !== '') } : {}),
+            ...(genero ? { genero: genero } : {})
           }
         },
         newFiles,
