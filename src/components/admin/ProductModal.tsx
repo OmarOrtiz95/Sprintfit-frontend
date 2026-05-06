@@ -19,7 +19,10 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
     price: 0,
     stockQuantity: 0,
     isActive: true,
-    categoryId: ''
+    categoryId: '',
+    tallas: '',
+    colores: '',
+    genero: ''
   });
   
   const [existingImages, setExistingImages] = useState<ProductImage[]>([]);
@@ -37,7 +40,10 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
         price: initialData.price,
         stockQuantity: initialData.stockQuantity,
         isActive: initialData.isActive,
-        categoryId: initialData.categoryId.toString()
+        categoryId: initialData.categoryId.toString(),
+        tallas: Array.isArray(initialData.attributes?.talla) ? (initialData.attributes?.talla.join(', ') || '') : '',
+        colores: Array.isArray(initialData.attributes?.color) ? (initialData.attributes?.color.join(', ') || '') : '',
+        genero: initialData.attributes?.genero || ''
       });
       setExistingImages(initialData.images || []);
       setNewFiles([]);
@@ -50,7 +56,10 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
         price: 0,
         stockQuantity: 0,
         isActive: true,
-        categoryId: ''
+        categoryId: '',
+        tallas: '',
+        colores: '',
+        genero: ''
       });
       setExistingImages([]);
       setNewFiles([]);
@@ -103,6 +112,11 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
           price: Number(formData.price),
           stockQuantity: Number(formData.stockQuantity),
           categoryId: Number(formData.categoryId),
+          attributes: {
+            ...(formData.tallas ? { talla: formData.tallas.split(',').map(s => s.trim()).filter(s => s !== '') } : {}),
+            ...(formData.colores ? { color: formData.colores.split(',').map(s => s.trim()).filter(s => s !== '') } : {}),
+            ...(formData.genero ? { genero: formData.genero } : {})
+          }
         },
         newFiles,
         existingImages.map(img => img.url)
@@ -155,6 +169,27 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
           <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <input type="checkbox" id="isActive" style={{ width: 'auto' }} checked={formData.isActive} onChange={e => setFormData({...formData, isActive: e.target.checked})} />
             <label htmlFor="isActive" style={{ margin: 0, cursor: 'pointer' }}>Producto Activo</label>
+          </div>
+
+          <div className="form-attributes" style={{ border: '1px solid #eee', padding: '15px', borderRadius: '8px', marginBottom: '15px', background: '#f9f9f9' }}>
+            <h3 style={{ marginTop: 0, fontSize: '1rem', marginBottom: '10px' }}>Atributos del Producto</h3>
+            <div className="form-group">
+              <label>Tallas (separadas por coma)</label>
+              <input type="text" placeholder="Ej: S, M, L, XL" value={formData.tallas} onChange={e => setFormData({...formData, tallas: e.target.value})} />
+            </div>
+            <div className="form-group">
+              <label>Colores (separados por coma)</label>
+              <input type="text" placeholder="Ej: Negro, Blanco, Azul" value={formData.colores} onChange={e => setFormData({...formData, colores: e.target.value})} />
+            </div>
+            <div className="form-group">
+              <label>Género</label>
+              <select value={formData.genero} onChange={e => setFormData({...formData, genero: e.target.value})}>
+                <option value="">No especificado</option>
+                <option value="Hombre">Hombre</option>
+                <option value="Mujer">Mujer</option>
+                <option value="Unisex">Unisex</option>
+              </select>
+            </div>
           </div>
           
           <div className="form-group">
