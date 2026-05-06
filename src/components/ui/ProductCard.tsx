@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import type { Product } from '../../types';
+import { getImageUrl } from '../../utils/image-utils';
 import './ProductCard.css';
 
 interface Props {
@@ -18,7 +19,7 @@ export default function ProductCard({ product }: Props) {
       <div className="product-card__img-wrap">
         <span className="product-card__badge">NUEVO</span>
         {image ? (
-          <img src={image.url} alt={product.name} className="product-card__img" />
+          <img src={getImageUrl(image.url)} alt={product.name} className="product-card__img" />
         ) : (
           <div className="product-card__placeholder" />
         )}

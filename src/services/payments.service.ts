@@ -1,19 +1,12 @@
 import api from './api';
-import type { Payment } from '../types';
-
-interface CardDetails {
-  number: string;
-  cvc: string;
-  exp_month: string;
-  exp_year: string;
-}
 
 export const paymentsService = {
-  async processPayment(orderId: number, cardDetails?: CardDetails): Promise<Payment> {
-    const { data } = await api.post<Payment>('/payments/process', {
-      orderId,
-      cardDetails,
-    });
-    return data;
+  async processNequiPayment(data: { phoneNumber: string; amountInCents: number; customerEmail: string; orderId: number }) {
+    const response = await api.post('/payments/nequi', data);
+    return response.data;
   },
+  async getTransaction(transactionId: string) {
+    const response = await api.get(`/payments/${transactionId}`);
+    return response.data;
+  }
 };

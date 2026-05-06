@@ -18,6 +18,7 @@ export default function AdminLayout() {
           <h2>SprintFit Admin</h2>
         </div>
         <nav className="admin-nav">
+          <Link to="/admin/orders" className="admin-nav-link">Órdenes</Link>
           <Link to="/admin/products" className="admin-nav-link">Productos</Link>
           <Link to="/admin/categories" className="admin-nav-link">Categorías</Link>
           <Link to="/" className="admin-nav-link">Volver a la Tienda</Link>

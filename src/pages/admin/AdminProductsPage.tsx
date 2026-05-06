@@ -35,15 +35,20 @@ export default function AdminProductsPage() {
     loadData();
   }, []);
 
-  const handleSave = async (data: any) => {
-    if (editingProduct) {
-      await productsService.update(editingProduct.id, data);
-      toast.success('Producto actualizado exitosamente');
-    } else {
-      await productsService.create(data);
-      toast.success('Producto creado exitosamente');
+  const handleSave = async (data: any, files: File[], existingImages: string[]) => {
+    try {
+      if (editingProduct) {
+        await productsService.update(editingProduct.id, data, files, existingImages);
+        toast.success('Producto actualizado exitosamente');
+      } else {
+        await productsService.create(data, files);
+        toast.success('Producto creado exitosamente');
+      }
+      loadData();
+    } catch (error) {
+      console.error('Error saving product:', error);
+      toast.error('Error al guardar el producto');
     }
-    loadData();
   };
 
   const handleDelete = async (id: number) => {

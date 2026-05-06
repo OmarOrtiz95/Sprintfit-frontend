@@ -1,6 +1,7 @@
 import { FiX, FiMinus, FiPlus } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import { getImageUrl } from '../../utils/image-utils';
 import './CartSidebar.css';
 
 export default function CartSidebar() {
@@ -28,7 +29,7 @@ export default function CartSidebar() {
           )}
           {items.map(item => (
             <div key={item.productId} className="cart-item">
-              <img src={item.image} alt={item.name} className="cart-item__img" />
+              <img src={getImageUrl(item.image)} alt={item.name} className="cart-item__img" />
               <div className="cart-item__info">
                 <h4>{item.name}</h4>
                 <p className="cart-item__price">{formatPrice(item.price)}</p>

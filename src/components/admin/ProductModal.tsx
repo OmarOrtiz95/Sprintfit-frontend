@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import type { Product, Category } from '../../types';
+import { useState, useEffect, useRef } from 'react';
+import type { Product, Category, ProductImage } from '../../types';
+import { getImageUrl } from '../../utils/image-utils';
 import './Modal.css';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: any) => Promise<void>;
+  onSave: (data: any, files: File[], existingImages: string[]) => Promise<void>;
   initialData?: Product | null;
   categories: Category[];
 }
@@ -20,8 +21,12 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
     isActive: true,
     categoryId: ''
   });
-  const [imageUrls, setImageUrls] = useState<string[]>(['']);
+  
+  const [existingImages, setExistingImages] = useState<ProductImage[]>([]);
+  const [newFiles, setNewFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (initialData) {
@@ -34,15 +39,9 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
         isActive: initialData.isActive,
         categoryId: initialData.categoryId.toString()
       });
-      if (initialData.images && initialData.images.length > 0) {
-        setImageUrls(
-          [...initialData.images]
-            .sort((a, b) => a.displayOrder - b.displayOrder)
-            .map(img => img.url)
-        );
-      } else {
-        setImageUrls(['']);
-      }
+      setExistingImages(initialData.images || []);
+      setNewFiles([]);
+      setPreviews([]);
     } else {
       setFormData({
         name: '',
@@ -53,11 +52,40 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
         isActive: true,
         categoryId: ''
       });
-      setImageUrls(['']);
+      setExistingImages([]);
+      setNewFiles([]);
+      setPreviews([]);
     }
   }, [initialData, isOpen]);
 
+  // Clean up object URLs to avoid memory leaks
+  useEffect(() => {
+    return () => {
+      previews.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [previews]);
+
   if (!isOpen) return null;
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      setNewFiles(prev => [...prev, ...filesArray]);
+      
+      const newPreviews = filesArray.map(file => URL.createObjectURL(file));
+      setPreviews(prev => [...prev, ...newPreviews]);
+    }
+  };
+
+  const removeNewFile = (index: number) => {
+    URL.revokeObjectURL(previews[index]);
+    setNewFiles(prev => prev.filter((_, i) => i !== index));
+    setPreviews(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = (id: number) => {
+    setExistingImages(prev => prev.filter(img => img.id !== id));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,20 +97,16 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
         return;
       }
       
-      const images = imageUrls
-        .filter(url => url.trim() !== '')
-        .map((url, index) => ({
-          url: url.trim(),
-          displayOrder: index
-        }));
-
-      await onSave({
-        ...formData,
-        price: Number(formData.price),
-        stockQuantity: Number(formData.stockQuantity),
-        categoryId: Number(formData.categoryId),
-        images: images.length > 0 ? images : undefined
-      });
+      await onSave(
+        {
+          ...formData,
+          price: Number(formData.price),
+          stockQuantity: Number(formData.stockQuantity),
+          categoryId: Number(formData.categoryId),
+        },
+        newFiles,
+        existingImages.map(img => img.url)
+      );
       onClose();
     } catch (error) {
       console.error('Error saving product', error);
@@ -134,40 +158,56 @@ export default function ProductModal({ isOpen, onClose, onSave, initialData, cat
           </div>
           
           <div className="form-group">
-            <label>URLs de Imágenes</label>
-            {imageUrls.map((url, index) => (
-              <div key={index} style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                <input 
-                  type="text" 
-                  placeholder="https://ejemplo.com/foto.jpg" 
-                  value={url} 
-                  onChange={e => {
-                    const newUrls = [...imageUrls];
-                    newUrls[index] = e.target.value;
-                    setImageUrls(newUrls);
-                  }} 
-                />
-                <button 
-                  type="button" 
-                  className="btn-delete" 
-                  onClick={() => {
-                    const newUrls = [...imageUrls];
-                    newUrls.splice(index, 1);
-                    setImageUrls(newUrls.length ? newUrls : ['']);
-                  }}
-                >
-                  X
-                </button>
+            <label>Imágenes del Producto</label>
+            
+            <div className="image-preview-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '10px', marginBottom: '15px' }}>
+              {/* Existing Images */}
+              {existingImages.map((img) => (
+                <div key={img.id} className="image-preview-item" style={{ position: 'relative', aspectRatio: '1', border: '1px solid #ddd', borderRadius: '4px', overflow: 'hidden' }}>
+                  <img src={getImageUrl(img.url)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <button 
+                    type="button" 
+                    onClick={() => removeExistingImage(img.id)}
+                    style={{ position: 'absolute', top: '2px', right: '2px', background: 'rgba(255,0,0,0.7)', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', fontSize: '12px' }}
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+              
+              {/* New Previews */}
+              {previews.map((url, index) => (
+                <div key={index} className="image-preview-item" style={{ position: 'relative', aspectRatio: '1', border: '1px solid #007bff', borderRadius: '4px', overflow: 'hidden' }}>
+                  <img src={url} alt="New preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <button 
+                    type="button" 
+                    onClick={() => removeNewFile(index)}
+                    style={{ position: 'absolute', top: '2px', right: '2px', background: 'rgba(255,0,0,0.7)', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', fontSize: '12px' }}
+                  >
+                    X
+                  </button>
+                  <span style={{ position: 'absolute', bottom: '2px', left: '2px', background: 'rgba(0,123,255,0.7)', color: 'white', fontSize: '8px', padding: '1px 3px', borderRadius: '2px' }}>NUEVA</span>
+                </div>
+              ))}
+
+              {/* Add Button */}
+              <div 
+                onClick={() => fileInputRef.current?.click()}
+                style={{ aspectRatio: '1', border: '2px dashed #ccc', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexDirection: 'column', color: '#666' }}
+              >
+                <span style={{ fontSize: '24px' }}>+</span>
+                <span style={{ fontSize: '10px' }}>Subir</span>
               </div>
-            ))}
-            <button 
-              type="button" 
-              className="btn-secondary" 
-              style={{ fontSize: '0.8rem', padding: '5px 10px', marginTop: '5px' }} 
-              onClick={() => setImageUrls([...imageUrls, ''])}
-            >
-              + Agregar otra URL
-            </button>
+            </div>
+
+            <input 
+              type="file" 
+              multiple 
+              accept="image/*" 
+              ref={fileInputRef} 
+              style={{ display: 'none' }} 
+              onChange={handleFileChange} 
+            />
           </div>
 
           <div className="modal-actions">

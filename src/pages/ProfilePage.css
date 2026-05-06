@@ -166,3 +166,12 @@ hr {
 }
 
 .mt-4 { margin-top: 20px; }
+
+.checkout__row {
+  display: flex;
+  gap: 15px;
+}
+
+.checkout__row input {
+  flex: 1;
+}

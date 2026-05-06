@@ -18,15 +18,20 @@ export default function Navbar() {
           <Link to="/category/calzado" className="navbar__link">CALZADO</Link>
           <Link to="/category/ropa" className="navbar__link">ROPA</Link>
           <Link to="/category/accesorios" className="navbar__link">ACCESORIOS</Link>
-          
+
           <div className="navbar__auth">
             {isAuthenticated ? (
               <>
+                {user?.role === 'ADMIN' && (
+                  <Link to="/admin" className="navbar__link" style={{ fontWeight: 'bold' }}>
+                    PANEL ADMIN
+                  </Link>
+                )}
                 <Link to="/profile" className="navbar__link" style={{ textDecoration: 'underline' }}>
                   HOLA, {user?.fullName?.split(' ')[0].toUpperCase()}
                 </Link>
-                <button 
-                  className="navbar__link" 
+                <button
+                  className="navbar__link"
                   onClick={logout}
                   style={{ background: 'none', border: 'none', padding: 0 }}
                 >

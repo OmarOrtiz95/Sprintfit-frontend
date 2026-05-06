@@ -4,6 +4,7 @@ import { productsService } from '../services/products.service';
 import { useCart } from '../context/CartContext';
 import { FiChevronDown } from 'react-icons/fi';
 import type { Product } from '../types';
+import { getImageUrl } from '../utils/image-utils';
 import toast from 'react-hot-toast';
 import './ProductDetailPage.css';
 
@@ -77,7 +78,7 @@ export default function ProductDetailPage() {
         <div className="product-detail__gallery">
           <div className="product-detail__img-main">
             {sortedImages[selectedImage] ? (
-              <img src={sortedImages[selectedImage].url} alt={product.name} />
+              <img src={getImageUrl(sortedImages[selectedImage].url)} alt={product.name} />
             ) : (
               <div className="product-detail__img-placeholder" />
             )}
@@ -89,7 +90,7 @@ export default function ProductDetailPage() {
                 className={`product-detail__thumb ${i === selectedImage ? 'active' : ''}`}
                 onClick={() => setSelectedImage(i)}
               >
-                <img src={img.url} alt={`${product.name} ${i + 1}`} />
+                <img src={getImageUrl(img.url)} alt={`${product.name} ${i + 1}`} />
               </button>
             ))}
           </div>
@@ -152,7 +153,7 @@ export default function ProductDetailPage() {
           <div className="product-detail__related-grid">
             {relatedProducts.map(p => (
               <div key={p.id} className="product-detail__related-card" onClick={() => window.location.href = `/product/${p.id}`}>
-                <img src={p.images?.[0]?.url || ''} alt={p.name} />
+                <img src={getImageUrl(p.images?.[0]?.url)} alt={p.name} />
               </div>
             ))}
           </div>

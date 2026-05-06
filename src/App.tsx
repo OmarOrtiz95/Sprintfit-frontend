@@ -17,6 +17,7 @@ import AdminRoute from './components/auth/AdminRoute';
 import AdminLayout from './components/layout/AdminLayout';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminProductsPage from './pages/admin/AdminProductsPage';
+import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
                 <Route index element={<Navigate to="/admin/products" replace />} />
                 <Route path="categories" element={<AdminCategoriesPage />} />
                 <Route path="products" element={<AdminProductsPage />} />
+                <Route path="orders" element={<AdminOrdersPage />} />
               </Route>
             </Route>
           </Routes>
