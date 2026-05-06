@@ -12,6 +12,7 @@ export interface Category {
   parentId: number | null;
   children?: Category[];
   parent?: Category;
+  products?: Product[];
   createdAt?: string;
   updatedAt?: string;
 }

@@ -12,6 +12,11 @@ export const categoriesService = {
     return data;
   },
 
+  async getBySlug(slug: string): Promise<Category> {
+    const { data } = await api.get<Category>(`/categories/slug/${slug}`);
+    return data;
+  },
+
   async create(categoryData: { name: string; slug: string; parentId?: number | null }): Promise<Category> {
     const { data } = await api.post<Category>('/categories', categoryData);
     return data;
