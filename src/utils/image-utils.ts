@@ -1,3 +1,5 @@
+import { BASE_URL } from '../config/api.config';
+
 export function getImageUrl(path: string | undefined): string {
     if (!path) return '';
     
@@ -6,13 +8,9 @@ export function getImageUrl(path: string | undefined): string {
         return path;
     }
     
-    // Construct base URL from VITE_API_URL
-    // Example: http://localhost:3000/api/v1 -> http://localhost:3000
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
-    const baseUrl = apiUrl.split('/api/')[0];
-    
     // Ensure path starts with /
     const normalizedPath = path.startsWith('/') ? path : `/${path}`;
     
-    return `${baseUrl}${normalizedPath}`;
+    return `${BASE_URL}${normalizedPath}`;
 }
+
