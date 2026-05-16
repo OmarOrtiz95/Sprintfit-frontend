@@ -22,6 +22,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('sprintfit-token');
       localStorage.removeItem('sprintfit-user');
+      window.dispatchEvent(new Event('unauthorized'));
     }
     return Promise.reject(error);
   }

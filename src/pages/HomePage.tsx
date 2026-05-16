@@ -65,30 +65,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Gender Section */}
-      <section className="gender">
-        <div className="section-bar section-bar--orange">
-          <h2>¿PARA QUIÉN QUIERES COMPRAR?</h2>
-        </div>
-        <div className="gender__grid">
-          <div className="gender__card" onClick={() => navigate('/category/ropa')}>
-            <div className="gender__card-overlay">
-              <span>Mujer</span>
-            </div>
-          </div>
-          <div className="gender__card" onClick={() => navigate('/category/calzado')}>
-            <div className="gender__card-overlay">
-              <span>Hombre</span>
-            </div>
-          </div>
-          <div className="gender__card" onClick={() => navigate('/category/accesorios')}>
-            <div className="gender__card-overlay">
-              <span>Accesorios</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Categories */}
       {categories.length > 0 && (
         <section className="categories-section">

@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import toast from 'react-hot-toast';
 import type { User } from '../types';
 import { authService } from '../services/auth.service';
 
@@ -43,6 +44,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [token, user]);
 
+  const logout = useCallback(() => {
+    setUser(null);
+    setToken(null);
+  }, []);
+
   const refreshProfile = async () => {
     if (!token) return;
     try {
@@ -56,6 +62,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
      if (token) refreshProfile();
   }, [token]);
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      if (isAuthenticated) {
+        logout();
+        toast.error('Tu sesión ha vencido. Por favor, inicia sesión de nuevo.');
+      }
+    };
+    window.addEventListener('unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('unauthorized', handleUnauthorized);
+  }, [isAuthenticated, logout]);
 
   const login = async (email: string, password: string) => {
     setLoading(true);
@@ -81,11 +98,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false);
     }
-  };
-
-  const logout = () => {
-    setUser(null);
-    setToken(null);
   };
 
   return (
