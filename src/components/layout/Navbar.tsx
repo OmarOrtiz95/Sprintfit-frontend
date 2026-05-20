@@ -97,7 +97,7 @@ export default function Navbar() {
     <header className="navbar">
       <div className="navbar__container">
         <Link to="/" className="navbar__logo">
-          SPRINT<span>FIT</span>
+          <img src="/logo.jpeg" alt="SprintFit" />
         </Link>
         <nav className="navbar__links">
           {rootCategories.map((cat) => (

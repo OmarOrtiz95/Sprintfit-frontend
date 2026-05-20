@@ -22,7 +22,7 @@ export default function HomePage() {
     }).finally(() => setLoading(false));
   }, []);
 
-  const featuredProducts = products.slice(0, 4);
+  const featuredProducts = products.slice(0, 8);
 
   return (
     <div className="home">

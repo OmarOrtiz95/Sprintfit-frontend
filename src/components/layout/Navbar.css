@@ -18,15 +18,16 @@
 }
 
 .navbar__logo {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #fff;
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  letter-spacing: 2px;
 }
 
-.navbar__logo span {
-  color: #222;
+.navbar__logo img {
+  max-height: 48px;
+  width: auto;
+  border-radius: 4px;
+  object-fit: contain;
 }
 
 .navbar__links {
