@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { productsService } from '../services/products.service';
 import { categoriesService } from '../services/categories.service';
 import ProductCard from '../components/ui/ProductCard';
@@ -10,7 +10,6 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     Promise.all([
