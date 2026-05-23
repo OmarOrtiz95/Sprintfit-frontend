@@ -41,7 +41,7 @@ export default function RegisterPage() {
         fullName: result.data.fullName,
         phone: result.data.phone,
       });
-      toast.success('¡Cuenta creada! Por favor revisa tu correo para verificar (ver consola del backend en desarrollo).', { duration: 6000 });
+      toast.success('¡Cuenta creada! Por favor revisa tu correo para verificar.', { duration: 6000 });
       navigate('/');
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Error al crear la cuenta');
